@@ -1,0 +1,38 @@
+service: portfolio-backend
+frameworkVersion: '2 || 3'
+
+useDotenv: true
+
+provider:
+  name: aws
+  region: ${opt:region, "eu-north-1"}
+  stage: ${opt:stage, "dev"}
+
+  runtime: nodejs14.x
+  lambdaHashingVersion: '20201221'
+
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "ssm:GetParameter"
+      Resource:
+        - arn:aws:ssm:${opt:region, "eu-north-1"}:${aws:accountId}:parameter/${env:GITHUB_PAT_PARAMETER_NAME}
+
+plugins:
+  - serverless-offline
+  - serverless-plugin-typescript
+  - serverless-plugin-optimize
+
+functions:
+  getContent:
+    handler: lambda.handler
+    environment:
+      NONO_REPO_LIST: ${env:NONO_REPO_LIST}
+      AMOUNT_OF_REPOS: ${env:AMOUNT_OF_REPOS}
+      AMOUNT_OF_TOPICS: ${env:AMOUNT_OF_TOPICS}
+      GITHUB_PAT_PARAMETER_NAME: ${env:GITHUB_PAT_PARAMETER_NAME}
+      ALLOWED_ORIGINS: ${env:ALLOWED_ORIGINS}
+    events:
+      - httpApi:
+          path: /
+          method: get
