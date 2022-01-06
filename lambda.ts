@@ -73,6 +73,12 @@ export const handler: Handler = async (event: any) => {
     const repos = (data.repositories?.nodes || [])
       .filter(({ isArchived, name }) => !isArchived && !NONO_REPO_LIST.includes(name));
 
+    const topics = repos
+      .map((repo) => (repo.topics?.nodes || [])
+        .map(({ topic }) => topic?.name),
+      )
+      .flat();
+
     return {
       statusCode: 200,
       headers: getResponseHeaders(event.headers.origin),
@@ -86,11 +92,9 @@ export const handler: Handler = async (event: any) => {
               url: repo.url,
             }))
             .splice(0, AMOUNT_OF_REPOS),
-          topics: repos
-            .map((repo) => (repo.topics?.nodes || [])
-              .map(({ topic }) => topic?.name),
-            )
-            .flat()
+          topics: topics
+            // remove duplicates
+            .filter((topic, index) => topics.indexOf(topic) === index)
             .splice(0, AMOUNT_OF_TOPICS),
         },
         null,
