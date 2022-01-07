@@ -5,7 +5,7 @@
   "scripts": {
     "start": "serverless offline",
     "deploy": "serverless deploy --stage prod",
-    "destroy": "serverless destroy --stage prod"
+    "remove": "serverless remove --stage prod"
   },
   "dependencies": {
     "aws-sdk": "^2.1051.0",
