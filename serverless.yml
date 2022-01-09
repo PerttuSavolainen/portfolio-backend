@@ -31,7 +31,7 @@ functions:
       AMOUNT_OF_REPOS: ${env:AMOUNT_OF_REPOS}
       AMOUNT_OF_TOPICS: ${env:AMOUNT_OF_TOPICS}
       GITHUB_PAT_PARAMETER_NAME: ${env:GITHUB_PAT_PARAMETER_NAME}
-      ALLOWED_ORIGINS: ${env:ALLOWED_ORIGINS}
+      ALLOWED_ORIGIN: ${env:ALLOWED_ORIGIN}
     events:
       - httpApi:
           path: /
